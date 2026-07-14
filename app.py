@@ -11,75 +11,149 @@ st.set_page_config(page_title="Clasificador de Dígitos", layout="centered")
 
 
 # ---------------------------------------------------------------------------
-# Estilos
+# Estilos — concepto: hoja cuadriculada de cuaderno / ficha de examen
+# Paleta: crema #F5F5EB, beige #EFE7DA / #E1DACA, taupe #C1B6A3, arcilla #B3907A
 # ---------------------------------------------------------------------------
 st.markdown(
     """
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@400;500;600;700&display=swap');
+
         .stApp {
-            background: #fafafa;
+            background-color: #F5F5EB;
+            background-image:
+                linear-gradient(#E1DACA 1px, transparent 1px),
+                linear-gradient(90deg, #E1DACA 1px, transparent 1px);
+            background-size: 26px 26px;
+        }
+
+        html, body, [class*="css"] {
+            font-family: 'Sora', sans-serif;
+        }
+
+        .eyebrow {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            color: #B3907A;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 0.3rem;
         }
         .main-title {
-            font-size: 2.4rem;
-            font-weight: 800;
-            color: #1a1a1a;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4A3F35;
             text-align: center;
             margin-bottom: 0.2rem;
             letter-spacing: -0.5px;
         }
         .subtitle {
             text-align: center;
-            color: #6b7280;
-            font-size: 1rem;
-            margin-bottom: 1.8rem;
+            color: #8a7f70;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
         }
-        .card {
-            background: #ffffff;
-            border: 1px solid #e2e6f0;
-            border-radius: 16px;
-            padding: 1.4rem;
-            box-shadow: 0 4px 16px rgba(30, 64, 175, 0.06);
+
+        .sheet {
+            background: #FFFFFF;
+            border: 1.5px solid #E1DACA;
+            border-radius: 4px;
+            padding: 1.5rem 1.5rem 1.2rem 1.5rem;
+            position: relative;
+            box-shadow: 4px 4px 0px #EFE7DA;
         }
-        .result-box {
-            background: linear-gradient(135deg, #eef3ff, #ffffff);
-            border: 1px solid #2563eb;
-            border-radius: 16px;
-            padding: 1.6rem;
+        .sheet-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: #C1B6A3;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+
+        .ticket {
+            background: #4A3F35;
+            border-radius: 4px;
+            padding: 1.8rem 1.5rem;
             text-align: center;
             margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
         }
-        .result-number {
-            font-size: 3.4rem;
-            font-weight: 900;
-            color: #1d4ed8;
-            letter-spacing: 6px;
+        .ticket::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: repeating-linear-gradient(
+                90deg, #B3907A 0px, #B3907A 8px, transparent 8px, transparent 16px
+            );
         }
-        .digit-badge {
-            display: inline-block;
-            background: #f2f6ff;
-            border: 1px solid #bfd3fb;
-            border-radius: 10px;
-            padding: 6px 14px;
-            margin: 4px;
-            font-size: 1.1rem;
-            color: #33415c;
+        .ticket-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: #C1B6A3;
+            text-transform: uppercase;
         }
-        .digit-badge span {
-            color: #1d4ed8;
+        .ticket-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 3.6rem;
             font-weight: 700;
+            color: #F5F5EB;
+            letter-spacing: 10px;
+            margin: 0.3rem 0 0 10px;
         }
+
+        .stamp {
+            display: inline-block;
+            background: #FFFFFF;
+            border: 1.5px dashed #C1B6A3;
+            border-radius: 6px;
+            padding: 6px 12px;
+            margin: 4px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            color: #8a7f70;
+        }
+        .stamp b {
+            color: #B3907A;
+            font-size: 1.1rem;
+        }
+
+        .placeholder {
+            text-align: center;
+            color: #b8ae9e;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            padding: 3.2rem 1rem;
+            border: 1.5px dashed #E1DACA;
+            border-radius: 4px;
+        }
+
         .stButton>button {
-            background: #2563eb;
-            color: white;
-            border-radius: 10px;
+            background: #B3907A;
+            color: #FFFFFF;
+            border-radius: 4px;
             border: none;
             padding: 0.6rem 1.6rem;
             font-weight: 600;
             width: 100%;
+            font-family: 'Sora', sans-serif;
+            letter-spacing: 0.5px;
         }
         .stButton>button:hover {
-            background: #1d4ed8;
-            color: white;
+            background: #9c7a63;
+            color: #FFFFFF;
+        }
+
+        footer, .footnote {
+            text-align: center;
+            color: #b8ae9e;
+            font-size: 0.78rem;
+            margin-top: 2rem;
+            font-family: 'Space Mono', monospace;
         }
     </style>
     """,
@@ -162,6 +236,7 @@ def predecir(imagen_rgba):
 # ---------------------------------------------------------------------------
 # Interfaz
 # ---------------------------------------------------------------------------
+st.markdown('<div class="eyebrow">Reconocimiento de escritura</div>', unsafe_allow_html=True)
 st.markdown('<div class="main-title">Clasificador de Dígitos</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="subtitle">Dibuja uno o varios números separados entre sí y presiona Predecir</div>',
@@ -171,11 +246,12 @@ st.markdown(
 col_izq, col_der = st.columns([1, 1], gap="large")
 
 with col_izq:
-    st.markdown('<div class="card">', unsafe_allow_html=True)
+    st.markdown('<div class="sheet">', unsafe_allow_html=True)
+    st.markdown('<div class="sheet-label">Entrada — dibuja aquí</div>', unsafe_allow_html=True)
     canvas_result = st_canvas(
         fill_color="rgba(0, 0, 0, 1)",
         stroke_width=18,
-        stroke_color="#000000",
+        stroke_color="#4A3F35",
         background_color="#FFFFFF",
         height=280,
         width=280,
@@ -195,24 +271,26 @@ with col_der:
             else:
                 numero_completo = "".join(r[0] for r in resultados)
                 st.markdown(
-                    f'<div class="result-box">'
-                    f'<div style="color:#9aa0c3; font-size:0.9rem;">RESULTADO</div>'
-                    f'<div class="result-number">{numero_completo}</div>'
+                    f'<div class="ticket">'
+                    f'<div class="ticket-label">Salida</div>'
+                    f'<div class="ticket-number">{numero_completo}</div>'
                     f"</div>",
                     unsafe_allow_html=True,
                 )
 
                 st.write("")
-                badges = "".join(
-                    f'<span class="digit-badge">Dígito {i+1}: <span>{d}</span> '
-                    f'({conf*100:.0f}%)</span>'
+                stamps = "".join(
+                    f'<span class="stamp">Dígito {i+1} · <b>{d}</b> · {conf*100:.0f}%</span>'
                     for i, (d, conf, _) in enumerate(resultados)
                 )
-                st.markdown(badges, unsafe_allow_html=True)
+                st.markdown(stamps, unsafe_allow_html=True)
 
                 if len(resultados) == 1:
                     st.write("")
-                    st.caption("Distribución de probabilidad por clase")
+                    st.markdown(
+                        '<div class="sheet-label" style="margin-top:1rem;">Distribución por clase</div>',
+                        unsafe_allow_html=True,
+                    )
                     _, _, distrib = resultados[0]
                     st.bar_chart(
                         {class_names[i]: float(distrib[i]) for i in range(len(class_names))}
@@ -221,15 +299,11 @@ with col_der:
             st.info("Dibuja al menos un número antes de predecir.")
     else:
         st.markdown(
-            '<div class="card" style="text-align:center; color:#9ca3af; padding-top:3rem; padding-bottom:3rem;">'
-            "Tu resultado va a aparecer aquí"
-            "</div>",
+            '<div class="placeholder">esperando trazo &gt;&gt;&gt;</div>',
             unsafe_allow_html=True,
         )
 
 st.markdown(
-    '<p style="text-align:center; color:#9ca3af; font-size:0.8rem; margin-top:2rem;">'
-    "Red neuronal entrenada con TensorFlow/Keras sobre el dataset MNIST"
-    "</p>",
+    '<p class="footnote">Red neuronal · TensorFlow / Keras · dataset MNIST</p>',
     unsafe_allow_html=True,
 )

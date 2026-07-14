@@ -17,32 +17,32 @@ st.markdown(
     """
     <style>
         .stApp {
-            background: linear-gradient(180deg, #0f1220 0%, #1a1f38 100%);
+            background: #fafafa;
         }
         .main-title {
             font-size: 2.4rem;
             font-weight: 800;
-            color: #f5f5ff;
+            color: #1a1a1a;
             text-align: center;
             margin-bottom: 0.2rem;
             letter-spacing: -0.5px;
         }
         .subtitle {
             text-align: center;
-            color: #9aa0c3;
+            color: #6b7280;
             font-size: 1rem;
             margin-bottom: 1.8rem;
         }
         .card {
-            background: #171c30;
-            border: 1px solid #2b3156;
+            background: #ffffff;
+            border: 1px solid #e2e6f0;
             border-radius: 16px;
             padding: 1.4rem;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            box-shadow: 0 4px 16px rgba(30, 64, 175, 0.06);
         }
         .result-box {
-            background: linear-gradient(135deg, #2c1b52, #171c30);
-            border: 1px solid #6d4dc9;
+            background: linear-gradient(135deg, #eef3ff, #ffffff);
+            border: 1px solid #2563eb;
             border-radius: 16px;
             padding: 1.6rem;
             text-align: center;
@@ -51,25 +51,25 @@ st.markdown(
         .result-number {
             font-size: 3.4rem;
             font-weight: 900;
-            color: #ffffff;
+            color: #1d4ed8;
             letter-spacing: 6px;
         }
         .digit-badge {
             display: inline-block;
-            background: #262c4d;
-            border: 1px solid #4a4f80;
+            background: #f2f6ff;
+            border: 1px solid #bfd3fb;
             border-radius: 10px;
             padding: 6px 14px;
             margin: 4px;
             font-size: 1.1rem;
-            color: #d8dbf5;
+            color: #33415c;
         }
         .digit-badge span {
-            color: #8ef0c0;
+            color: #1d4ed8;
             font-weight: 700;
         }
         .stButton>button {
-            background: #6d4dc9;
+            background: #2563eb;
             color: white;
             border-radius: 10px;
             border: none;
@@ -78,7 +78,7 @@ st.markdown(
             width: 100%;
         }
         .stButton>button:hover {
-            background: #7f5ee0;
+            background: #1d4ed8;
             color: white;
         }
     </style>
@@ -221,16 +221,15 @@ with col_der:
             st.info("Dibuja al menos un número antes de predecir.")
     else:
         st.markdown(
-            '<div class="card" style="text-align:center; color:#6b7099; padding-top:3rem; padding-bottom:3rem;">'
+            '<div class="card" style="text-align:center; color:#9ca3af; padding-top:3rem; padding-bottom:3rem;">'
             "Tu resultado va a aparecer aquí"
             "</div>",
             unsafe_allow_html=True,
         )
 
 st.markdown(
-    '<p style="text-align:center; color:#4a4f70; font-size:0.8rem; margin-top:2rem;">'
+    '<p style="text-align:center; color:#9ca3af; font-size:0.8rem; margin-top:2rem;">'
     "Red neuronal entrenada con TensorFlow/Keras sobre el dataset MNIST"
     "</p>",
     unsafe_allow_html=True,
 )
-

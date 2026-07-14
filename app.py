@@ -246,7 +246,6 @@ st.markdown(
 col_izq, col_der = st.columns([1, 1], gap="large")
 
 with col_izq:
-    st.markdown('<div class="sheet">', unsafe_allow_html=True)
     st.markdown('<div class="sheet-label">Entrada — dibuja aquí</div>', unsafe_allow_html=True)
     canvas_result = st_canvas(
         fill_color="rgba(0, 0, 0, 1)",
@@ -259,7 +258,6 @@ with col_izq:
         key="canvas",
     )
     predecir_click = st.button("Predecir")
-    st.markdown("</div>", unsafe_allow_html=True)
 
 with col_der:
     if predecir_click:
@@ -304,6 +302,6 @@ with col_der:
         )
 
 st.markdown(
-    '<p class="footnote">Red neuronal · TensorFlow / Keras · dataset MNIST</p>',
+    '<p class="footnote">Gael Alexander Basana Hernandez · dataset MNIST</p>',
     unsafe_allow_html=True,
 )

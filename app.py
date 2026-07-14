@@ -155,6 +155,13 @@ st.markdown(
             margin-top: 2rem;
             font-family: 'Space Mono', monospace;
         }
+
+        /* El componente de dibujo estira su iframe al ancho de la columna;
+           esto lo ajusta al tamaño real del lienzo (280px) para que no quede
+           espacio en blanco donde no se puede dibujar. */
+        div:has(> iframe[title="streamlit_drawable_canvas.st_canvas"]) {
+            width: fit-content !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,

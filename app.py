@@ -1,4 +1,3 @@
-import hashlib
 import json
 
 import numpy as np
@@ -271,11 +270,6 @@ st.markdown(
 
 col_izq, col_der = st.columns([1, 1], gap="large")
 
-if "resultados" not in st.session_state:
-    st.session_state.resultados = None
-if "ultimo_hash" not in st.session_state:
-    st.session_state.ultimo_hash = None
-
 with col_izq:
     st.markdown('<div class="sheet-label">Entrada — dibuja aquí</div>', unsafe_allow_html=True)
     canvas_result = st_canvas(
@@ -288,45 +282,51 @@ with col_izq:
         drawing_mode="freedraw",
         key="canvas",
     )
-
-# st_canvas envía una actualización a Streamlit (y por tanto dispara un rerun)
-# cada vez que se completa un trazo. Aprovechamos eso: comparamos el dibujo
-# actual contra el último que ya procesamos y, si cambió, predecimos solo
-# en ese momento — así no se repite la predicción en cada rerun sin motivo.
-tiene_trazo = canvas_result.image_data is not None and canvas_result.image_data.sum() > 0
-
-if tiene_trazo:
-    hash_actual = hashlib.md5(canvas_result.image_data.tobytes()).hexdigest()
-    if hash_actual != st.session_state.ultimo_hash:
-        st.session_state.ultimo_hash = hash_actual
-        st.session_state.resultados = predecir(canvas_result.image_data)
-else:
-    st.session_state.ultimo_hash = None
-    st.session_state.resultados = None
+    predecir_click = st.button("Predecir")
 
 with col_der:
-    resultados = st.session_state.resultados
-    if resultados is not None:
-        if not resultados:
-            st.warning("No se detectó ningún número. Intenta dibujar con trazo más grueso.")
-        else:
-            numero_completo = "".join(r[0] for r in resultados)
-            st.markdown(
-                f'<div class="ticket">'
-                f'<div class="ticket-label">Salida</div>'
-                f'<div class="ticket-number">{numero_completo}</div>'
-                f"</div>",
-                unsafe_allow_html=True,
-            )
+    if predecir_click:
+        if canvas_result.image_data is not None and canvas_result.image_data.sum() > 0:
+            resultados = predecir(canvas_result.image_data)
 
-            st.write("")
-            stamps = "".join(
-                f'<span class="stamp">Dígito {i+1} · <b>{d}</b> · {conf*100:.0f}%</span>'
-                for i, (d, conf, _) in enumerate(resultados)
-            )
-            st.markdown(stamps, unsafe_allow_html=True)
-
-            if len(resultados) == 1:
-                st.write("")
+            if not resultados:
+                st.warning("No se detectó ningún número. Intenta dibujar con trazo más grueso.")
+            else:
+                numero_completo = "".join(r[0] for r in resultados)
                 st.markdown(
-                    '<div class="sheet-label" style="margin-top:1rem;">Distribución por clase</div>',
+                    f'<div class="ticket">'
+                    f'<div class="ticket-label">Salida</div>'
+                    f'<div class="ticket-number">{numero_completo}</div>'
+                    f"</div>",
+                    unsafe_allow_html=True,
+                )
+
+                st.write("")
+                stamps = "".join(
+                    f'<span class="stamp">Dígito {i+1} · <b>{d}</b> · {conf*100:.0f}%</span>'
+                    for i, (d, conf, _) in enumerate(resultados)
+                )
+                st.markdown(stamps, unsafe_allow_html=True)
+
+                if len(resultados) == 1:
+                    st.write("")
+                    st.markdown(
+                        '<div class="sheet-label" style="margin-top:1rem;">Distribución por clase</div>',
+                        unsafe_allow_html=True,
+                    )
+                    _, _, distrib = resultados[0]
+                    st.bar_chart(
+                        {class_names[i]: float(distrib[i]) for i in range(len(class_names))}
+                    )
+        else:
+            st.info("Dibuja al menos un número antes de predecir.")
+    else:
+        st.markdown(
+            '<div class="placeholder">esperando trazo &gt;&gt;&gt;</div>',
+            unsafe_allow_html=True,
+        )
+
+st.markdown(
+    '<p class="footnote">Gael Alexander Basana Hernandez · dataset MNIST</p>',
+    unsafe_allow_html=True,
+)

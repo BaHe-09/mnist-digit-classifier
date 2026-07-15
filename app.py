@@ -170,8 +170,8 @@ st.components.v1.html(
         const doc = window.parent.document;
         const iframe = doc.querySelector('iframe[data-testid="stCustomComponentV1"]');
         if (iframe) {
-            iframe.style.width = '280px';
-            iframe.style.maxWidth = '280px';
+            iframe.style.width = '300px';
+            iframe.style.maxWidth = '300px';
             const wrapper = iframe.closest('div[data-testid="stElementContainer"]') || iframe.parentElement;
             if (wrapper) {
                 wrapper.style.width = 'fit-content';
@@ -278,7 +278,7 @@ with col_izq:
         stroke_color="#4A3F35",
         background_color="#FFFFFF",
         height=280,
-        width=280,
+        width=300,
         drawing_mode="freedraw",
         key="canvas",
     )

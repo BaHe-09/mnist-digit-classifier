@@ -4,4 +4,4 @@ tensorflow-cpu>=2.16,<2.18
 scipy
 numpy<2
 pillow
-
+pyarrow<25

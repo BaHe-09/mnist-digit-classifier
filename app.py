@@ -159,8 +159,12 @@ st.markdown(
         /* El componente de dibujo estira su iframe al ancho de la columna;
            esto lo ajusta al tamaño real del lienzo (280px) para que no quede
            espacio en blanco donde no se puede dibujar. */
-        div:has(> iframe[title="streamlit_drawable_canvas.st_canvas"]) {
+        div:has(> iframe[data-testid="stCustomComponentV1"]) {
             width: fit-content !important;
+        }
+        iframe[data-testid="stCustomComponentV1"] {
+            width: 300px !important;
+            max-width: 300px !important;
         }
     </style>
     """,
@@ -312,3 +316,4 @@ st.markdown(
     '<p class="footnote">Gael Alexander Basana Hernandez · dataset MNIST</p>',
     unsafe_allow_html=True,
 )
+

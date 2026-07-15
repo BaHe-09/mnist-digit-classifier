@@ -11,178 +11,79 @@ st.set_page_config(page_title="Clasificador de Dígitos", layout="centered")
 
 
 # ---------------------------------------------------------------------------
-# Estilos — concepto: hoja cuadriculada de cuaderno / ficha de examen
-# Paleta: crema #F5F5EB, beige #EFE7DA / #E1DACA, taupe #C1B6A3, arcilla #B3907A
+# Estilos
 # ---------------------------------------------------------------------------
 st.markdown(
     """
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@400;500;600;700&display=swap');
-
         .stApp {
-            background-color: #F5F5EB;
-            background-image:
-                linear-gradient(#E1DACA 1px, transparent 1px),
-                linear-gradient(90deg, #E1DACA 1px, transparent 1px);
-            background-size: 26px 26px;
-        }
-
-        html, body, [class*="css"] {
-            font-family: 'Sora', sans-serif;
-        }
-
-        .eyebrow {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.72rem;
-            letter-spacing: 3px;
-            color: #B3907A;
-            text-transform: uppercase;
-            text-align: center;
-            margin-bottom: 0.3rem;
+            background: linear-gradient(180deg, #0f1220 0%, #1a1f38 100%);
         }
         .main-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #4A3F35;
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #f5f5ff;
             text-align: center;
             margin-bottom: 0.2rem;
             letter-spacing: -0.5px;
         }
         .subtitle {
             text-align: center;
-            color: #8a7f70;
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
+            color: #9aa0c3;
+            font-size: 1rem;
+            margin-bottom: 1.8rem;
         }
-
-        .sheet {
-            background: #FFFFFF;
-            border: 1.5px solid #E1DACA;
-            border-radius: 4px;
-            padding: 1.5rem 1.5rem 1.2rem 1.5rem;
-            position: relative;
-            box-shadow: 4px 4px 0px #EFE7DA;
+        .card {
+            background: #171c30;
+            border: 1px solid #2b3156;
+            border-radius: 16px;
+            padding: 1.4rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
         }
-        .sheet-label {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            color: #C1B6A3;
-            text-transform: uppercase;
-            margin-bottom: 0.8rem;
-        }
-
-        .ticket {
-            background: #4A3F35;
-            border-radius: 4px;
-            padding: 1.8rem 1.5rem;
+        .result-box {
+            background: linear-gradient(135deg, #2c1b52, #171c30);
+            border: 1px solid #6d4dc9;
+            border-radius: 16px;
+            padding: 1.6rem;
             text-align: center;
             margin-top: 1rem;
-            position: relative;
-            overflow: hidden;
         }
-        .ticket::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: repeating-linear-gradient(
-                90deg, #B3907A 0px, #B3907A 8px, transparent 8px, transparent 16px
-            );
+        .result-number {
+            font-size: 3.4rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 6px;
         }
-        .ticket-label {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            color: #C1B6A3;
-            text-transform: uppercase;
-        }
-        .ticket-number {
-            font-family: 'Space Mono', monospace;
-            font-size: 3.6rem;
-            font-weight: 700;
-            color: #F5F5EB;
-            letter-spacing: 10px;
-            margin: 0.3rem 0 0 10px;
-        }
-
-        .stamp {
+        .digit-badge {
             display: inline-block;
-            background: #FFFFFF;
-            border: 1.5px dashed #C1B6A3;
-            border-radius: 6px;
-            padding: 6px 12px;
+            background: #262c4d;
+            border: 1px solid #4a4f80;
+            border-radius: 10px;
+            padding: 6px 14px;
             margin: 4px;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.9rem;
-            color: #8a7f70;
-        }
-        .stamp b {
-            color: #B3907A;
             font-size: 1.1rem;
+            color: #d8dbf5;
         }
-
-        .placeholder {
-            text-align: center;
-            color: #b8ae9e;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.85rem;
-            padding: 3.2rem 1rem;
-            border: 1.5px dashed #E1DACA;
-            border-radius: 4px;
+        .digit-badge span {
+            color: #8ef0c0;
+            font-weight: 700;
         }
-
         .stButton>button {
-            background: #B3907A;
-            color: #FFFFFF;
-            border-radius: 4px;
+            background: #6d4dc9;
+            color: white;
+            border-radius: 10px;
             border: none;
             padding: 0.6rem 1.6rem;
             font-weight: 600;
             width: 100%;
-            font-family: 'Sora', sans-serif;
-            letter-spacing: 0.5px;
         }
         .stButton>button:hover {
-            background: #9c7a63;
-            color: #FFFFFF;
-        }
-
-        footer, .footnote {
-            text-align: center;
-            color: #b8ae9e;
-            font-size: 0.78rem;
-            margin-top: 2rem;
-            font-family: 'Space Mono', monospace;
+            background: #7f5ee0;
+            color: white;
         }
     </style>
     """,
     unsafe_allow_html=True,
-)
-
-# El componente de dibujo estira su iframe al ancho de la columna aunque el
-# lienzo real sea de 300px; este script lo corrige activamente (el CSS solo
-# no basta porque el componente reajusta su propio tamaño tras cargar).
-st.components.v1.html(
-    """
-    <script>
-    function fixCanvasWidth() {
-        const doc = window.parent.document;
-        const iframe = doc.querySelector('iframe[data-testid="stCustomComponentV1"]');
-        if (iframe) {
-            iframe.style.width = '300px';
-            iframe.style.maxWidth = '300px';
-            const wrapper = iframe.closest('div[data-testid="stElementContainer"]') || iframe.parentElement;
-            if (wrapper) {
-                wrapper.style.width = 'fit-content';
-            }
-        }
-    }
-    fixCanvasWidth();
-    setInterval(fixCanvasWidth, 400);
-    </script>
-    """,
-    height=0,
 )
 
 
@@ -261,7 +162,6 @@ def predecir(imagen_rgba):
 # ---------------------------------------------------------------------------
 # Interfaz
 # ---------------------------------------------------------------------------
-st.markdown('<div class="eyebrow">Reconocimiento de escritura</div>', unsafe_allow_html=True)
 st.markdown('<div class="main-title">Clasificador de Dígitos</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="subtitle">Dibuja uno o varios números separados entre sí y presiona Predecir</div>',
@@ -271,11 +171,11 @@ st.markdown(
 col_izq, col_der = st.columns([1, 1], gap="large")
 
 with col_izq:
-    st.markdown('<div class="sheet-label">Entrada — dibuja aquí</div>', unsafe_allow_html=True)
+    st.markdown('<div class="card">', unsafe_allow_html=True)
     canvas_result = st_canvas(
         fill_color="rgba(0, 0, 0, 1)",
         stroke_width=18,
-        stroke_color="#4A3F35",
+        stroke_color="#000000",
         background_color="#FFFFFF",
         height=280,
         width=280,
@@ -283,6 +183,7 @@ with col_izq:
         key="canvas",
     )
     predecir_click = st.button("Predecir")
+    st.markdown("</div>", unsafe_allow_html=True)
 
 with col_der:
     if predecir_click:
@@ -294,26 +195,24 @@ with col_der:
             else:
                 numero_completo = "".join(r[0] for r in resultados)
                 st.markdown(
-                    f'<div class="ticket">'
-                    f'<div class="ticket-label">Salida</div>'
-                    f'<div class="ticket-number">{numero_completo}</div>'
+                    f'<div class="result-box">'
+                    f'<div style="color:#9aa0c3; font-size:0.9rem;">RESULTADO</div>'
+                    f'<div class="result-number">{numero_completo}</div>'
                     f"</div>",
                     unsafe_allow_html=True,
                 )
 
                 st.write("")
-                stamps = "".join(
-                    f'<span class="stamp">Dígito {i+1} · <b>{d}</b> · {conf*100:.0f}%</span>'
+                badges = "".join(
+                    f'<span class="digit-badge">Dígito {i+1}: <span>{d}</span> '
+                    f'({conf*100:.0f}%)</span>'
                     for i, (d, conf, _) in enumerate(resultados)
                 )
-                st.markdown(stamps, unsafe_allow_html=True)
+                st.markdown(badges, unsafe_allow_html=True)
 
                 if len(resultados) == 1:
                     st.write("")
-                    st.markdown(
-                        '<div class="sheet-label" style="margin-top:1rem;">Distribución por clase</div>',
-                        unsafe_allow_html=True,
-                    )
+                    st.caption("Distribución de probabilidad por clase")
                     _, _, distrib = resultados[0]
                     st.bar_chart(
                         {class_names[i]: float(distrib[i]) for i in range(len(class_names))}
@@ -322,11 +221,15 @@ with col_der:
             st.info("Dibuja al menos un número antes de predecir.")
     else:
         st.markdown(
-            '<div class="placeholder">esperando trazo &gt;&gt;&gt;</div>',
+            '<div class="card" style="text-align:center; color:#6b7099; padding-top:3rem; padding-bottom:3rem;">'
+            "Tu resultado va a aparecer aquí"
+            "</div>",
             unsafe_allow_html=True,
         )
 
 st.markdown(
-    '<p class="footnote">Gael Alexander Basana Hernandez · dataset MNIST</p>',
+    '<p style="text-align:center; color:#4a4f70; font-size:0.8rem; margin-top:2rem;">'
+    "Red neuronal entrenada con TensorFlow/Keras sobre el dataset MNIST"
+    "</p>",
     unsafe_allow_html=True,
 )

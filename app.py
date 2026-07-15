@@ -161,23 +161,57 @@ st.markdown(
 )
 
 # El componente de dibujo estira su iframe al ancho de la columna aunque el
-# lienzo real sea de 300px; este script lo corrige activamente (el CSS solo
-# no basta porque el componente reajusta su propio tamaño tras cargar).
+# lienzo real sea más angosto; este script lo corrige activamente (el CSS solo
+# no basta porque el componente reajusta su propio tamaño tras cargar) y de
+# paso dibuja 2 líneas punteadas (overlay, no forma parte del lienzo real)
+# que dividen el área en 3 carriles para escribir hasta 3 dígitos.
+CANVAS_ANCHO = 300
+CANVAS_ALTO = 280
+
 st.components.v1.html(
-    """
+    f"""
     <script>
-    function fixCanvasWidth() {
+    function fixCanvasWidth() {{
         const doc = window.parent.document;
         const iframe = doc.querySelector('iframe[data-testid="stCustomComponentV1"]');
-        if (iframe) {
-            iframe.style.width = '300px';
-            iframe.style.maxWidth = '300px';
+        if (iframe) {{
+            iframe.style.width = '{CANVAS_ANCHO}px';
+            iframe.style.maxWidth = '{CANVAS_ANCHO}px';
+            iframe.style.display = 'block';
             const wrapper = iframe.closest('div[data-testid="stElementContainer"]') || iframe.parentElement;
-            if (wrapper) {
+            if (wrapper) {{
                 wrapper.style.width = 'fit-content';
-            }
-        }
-    }
+                wrapper.style.position = 'relative';
+
+                if (!wrapper.querySelector('.guia-digitos')) {{
+                    const overlay = doc.createElement('div');
+                    overlay.className = 'guia-digitos';
+                    overlay.style.position = 'absolute';
+                    overlay.style.top = '0';
+                    overlay.style.left = '0';
+                    overlay.style.width = '{CANVAS_ANCHO}px';
+                    overlay.style.height = '{CANVAS_ALTO}px';
+                    overlay.style.pointerEvents = 'none';
+                    overlay.style.zIndex = '10';
+
+                    const tercio = {CANVAS_ANCHO} / 3;
+                    [tercio, tercio * 2].forEach((x) => {{
+                        const linea = doc.createElement('div');
+                        linea.style.position = 'absolute';
+                        linea.style.top = '0';
+                        linea.style.left = x + 'px';
+                        linea.style.width = '0';
+                        linea.style.height = '100%';
+                        linea.style.borderLeft = '1.5px dashed #C1B6A3';
+                        linea.style.opacity = '0.55';
+                        overlay.appendChild(linea);
+                    }});
+
+                    wrapper.appendChild(overlay);
+                }}
+            }}
+        }}
+    }}
     fixCanvasWidth();
     setInterval(fixCanvasWidth, 400);
     </script>
@@ -264,7 +298,7 @@ def predecir(imagen_rgba):
 st.markdown('<div class="eyebrow">Reconocimiento de escritura</div>', unsafe_allow_html=True)
 st.markdown('<div class="main-title">Clasificador de Dígitos</div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="subtitle">Dibuja uno o varios números separados entre sí y presiona Predecir</div>',
+    '<div class="subtitle">Dibuja hasta 3 números, uno por cada carril punteado, y presiona Predecir</div>',
     unsafe_allow_html=True,
 )
 
@@ -277,9 +311,10 @@ with col_izq:
         stroke_width=18,
         stroke_color="#4A3F35",
         background_color="#FFFFFF",
-        height=280,
-        width=280,
+        height=CANVAS_ALTO,
+        width=CANVAS_ANCHO,
         drawing_mode="freedraw",
+        display_toolbar=False,
         key="canvas",
     )
     predecir_click = st.button("Predecir")

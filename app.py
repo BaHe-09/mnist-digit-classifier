@@ -155,20 +155,34 @@ st.markdown(
             margin-top: 2rem;
             font-family: 'Space Mono', monospace;
         }
-
-        /* El componente de dibujo estira su iframe al ancho de la columna;
-           esto lo ajusta al tamaño real del lienzo (280px) para que no quede
-           espacio en blanco donde no se puede dibujar. */
-        div:has(> iframe[data-testid="stCustomComponentV1"]) {
-            width: fit-content !important;
-        }
-        iframe[data-testid="stCustomComponentV1"] {
-            width: 300px !important;
-            max-width: 300px !important;
-        }
     </style>
     """,
     unsafe_allow_html=True,
+)
+
+# El componente de dibujo estira su iframe al ancho de la columna aunque el
+# lienzo real sea de 300px; este script lo corrige activamente (el CSS solo
+# no basta porque el componente reajusta su propio tamaño tras cargar).
+st.components.v1.html(
+    """
+    <script>
+    function fixCanvasWidth() {
+        const doc = window.parent.document;
+        const iframe = doc.querySelector('iframe[data-testid="stCustomComponentV1"]');
+        if (iframe) {
+            iframe.style.width = '300px';
+            iframe.style.maxWidth = '300px';
+            const wrapper = iframe.closest('div[data-testid="stElementContainer"]') || iframe.parentElement;
+            if (wrapper) {
+                wrapper.style.width = 'fit-content';
+            }
+        }
+    }
+    fixCanvasWidth();
+    setInterval(fixCanvasWidth, 400);
+    </script>
+    """,
+    height=0,
 )
 
 
@@ -316,4 +330,3 @@ st.markdown(
     '<p class="footnote">Gael Alexander Basana Hernandez · dataset MNIST</p>',
     unsafe_allow_html=True,
 )
-
